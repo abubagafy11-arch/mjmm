@@ -1,71 +1,191 @@
-const SUPABASE_URL = "https://lkhzhobvppofowxipwiz.supabase.co";
+// =========================================
+// MJMMGLOBAL SUPABASE CONFIGURATION
+// =========================================
 
-const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
+const SUPABASE_URL =
+    "https://lkhzhobvppofowxipwiz.supabase.co";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const SUPABASE_PUBLISHABLE_KEY =
+    "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
 
-// ================= REGISTER =================
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+// =========================================
+// REGISTER
+// =========================================
 
 async function registerUser(event) {
 
     event.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    const name =
+        document.getElementById("name").value.trim();
 
-    const message = document.getElementById("message");
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    const message =
+        document.getElementById("message");
+
+    const button =
+        document.getElementById("registerButton");
+
 
     message.textContent = "";
 
-    if (!name || !email || !password) {
-        message.textContent = "Please fill in all fields.";
+
+    // Check name
+
+    if (!name) {
+
+        message.textContent =
+            "Please enter your full name.";
+
         return;
     }
+
+
+    // Check email
+
+    if (!email) {
+
+        message.textContent =
+            "Please enter your email address.";
+
+        return;
+    }
+
+
+    // Check password
 
     if (password.length < 6) {
+
         message.textContent =
             "Password must be at least 6 characters.";
+
         return;
     }
 
-    message.textContent = "Creating your account...";
 
-    const { data, error } =
-        await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    full_name: name
-                }
-            }
-        });
+    // Check matching passwords
 
-    if (error) {
-        message.textContent = error.message;
-        return;
-    }
+    if (password !== confirmPassword) {
 
-    if (data.user && !data.session) {
         message.textContent =
-            "Account created successfully. Please check your email and confirm your account.";
+            "Passwords do not match.";
+
         return;
     }
 
-    window.location.href = "dashboard.html";
+
+    button.disabled = true;
+
+    button.textContent =
+        "CREATING ACCOUNT...";
+
+
+    message.textContent =
+        "Creating your MJMMGLOBAL account...";
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password,
+
+                options: {
+
+                    data: {
+
+                        full_name: name
+
+                    }
+
+                }
+
+            });
+
+
+        if (error) {
+
+            message.textContent =
+                error.message;
+
+            button.disabled = false;
+
+            button.textContent =
+                "CREATE ACCOUNT";
+
+            return;
+        }
+
+
+        // Email confirmation required
+
+        if (data.user && !data.session) {
+
+            message.textContent =
+                "Account created successfully! Please check your email and confirm your account before logging in.";
+
+            button.disabled = false;
+
+            button.textContent =
+                "ACCOUNT CREATED";
+
+            return;
+        }
+
+
+        // Account created and logged in
+
+        if (data.session) {
+
+            window.location.href =
+                "dashboard.html";
+
+            return;
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Something went wrong. Please try again.";
+
+        button.disabled = false;
+
+        button.textContent =
+            "CREATE ACCOUNT";
+    }
 }
 
 
-// ================= LOGIN =================
+// =========================================
+// LOGIN
+// =========================================
 
 async function loginUser(event) {
 
     event.preventDefault();
+
 
     const email =
         document.getElementById("email").value.trim();
@@ -76,69 +196,186 @@ async function loginUser(event) {
     const message =
         document.getElementById("message");
 
-    message.textContent = "Signing you in...";
+    const button =
+        document.getElementById("loginButton");
 
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
 
-    if (error) {
-        message.textContent = error.message;
-        return;
-    }
+    message.textContent =
+        "Signing you in...";
 
-    if (data.user) {
-        window.location.href = "dashboard.html";
+    button.disabled = true;
+
+    button.textContent =
+        "LOGGING IN...";
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+
+                email: email,
+
+                password: password
+
+            });
+
+
+        if (error) {
+
+            message.textContent =
+                error.message;
+
+            button.disabled = false;
+
+            button.textContent =
+                "LOGIN";
+
+            return;
+        }
+
+
+        if (data.user) {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Something went wrong. Please try again.";
+
+        button.disabled = false;
+
+        button.textContent =
+            "LOGIN";
     }
 }
 
 
-// ================= LOGOUT =================
+// =========================================
+// LOGOUT
+// =========================================
 
 async function logoutUser() {
 
     const { error } =
         await supabaseClient.auth.signOut();
 
+
     if (error) {
+
         alert(error.message);
+
         return;
     }
 
-    window.location.href = "login.html";
+
+    window.location.href =
+        "login.html";
 }
 
 
-// ================= PROTECT DASHBOARD =================
+// =========================================
+// PROTECT DASHBOARD
+// =========================================
 
 async function protectDashboard() {
 
-    const {
-        data: { user }
-    } = await supabaseClient.auth.getUser();
+    try {
 
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
+        const {
+            data: { user },
+            error
+        } =
+            await supabaseClient.auth.getUser();
 
-    const name =
-        user.user_metadata?.full_name ||
-        "Member";
 
-    const nameElement =
-        document.getElementById("userName");
+        if (error || !user) {
 
-    const emailElement =
-        document.getElementById("userEmail");
+            window.location.href =
+                "login.html";
 
-    if (nameElement) {
-        nameElement.textContent = name;
-    }
+            return;
+        }
 
-    if (emailElement) {
-        emailElement.textContent = user.email;
+
+        const name =
+            user.user_metadata?.full_name ||
+            "Member";
+
+
+        const nameElement =
+            document.getElementById("userName");
+
+        const emailElement =
+            document.getElementById("userEmail");
+
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                name;
+        }
+
+
+        if (emailElement) {
+
+            emailElement.textContent =
+                user.email || "";
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        window.location.href =
+            "login.html";
     }
 }
+
+
+// =========================================
+// AUTOMATIC FORM DETECTION
+// =========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+
+        if (registerForm) {
+
+            registerForm.addEventListener(
+                "submit",
+                registerUser
+            );
+
+        }
+
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+
+        if (loginForm) {
+
+            loginForm.addEventListener(
+                "submit",
+                loginUser
+            );
+
+        }
+
+    }
+);
