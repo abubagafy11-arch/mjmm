@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Member Dashboard | MJMMGLOBAL</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="index.html" class="logo">
+        MJMM<span>GLOBAL</span>
+    </a>
+
+    <button
+        class="logout-button"
+        onclick="logoutUser()"
+    >
+        LOGOUT
+    </button>
+
+</header>
+
+<main class="dashboard">
+
+    <div class="dashboard-header">
+
+        <p class="section-label">
+            MEMBER DASHBOARD
+        </p>
+
+        <h1>
+            Welcome,
+            <span id="userName">Member</span>
+        </h1>
+
+        <p>
+            Welcome to your MJMMGLOBAL member area.
+        </p>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                👤
+            </div>
+
+            <h3>
+                My Profile
+            </h3>
+
+            <p>
+                View and manage your account information.
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🙏
+            </div>
+
+            <h3>
+                Prayer Requests
+            </h3>
+
+            <p>
+                Submit your prayer requests and connect
+                with the prayer community.
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                ❤️
+            </div>
+
+            <h3>
+                Testimonies
+            </h3>
+
+            <p>
+                Share what God has done in your life.
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                📅
+            </div>
+
+            <h3>
+                Events
+            </h3>
+
+            <p>
+                Discover upcoming MJMMGLOBAL programs
+                and events.
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🎵
+            </div>
+
+            <h3>
+                Music
+            </h3>
+
+            <p>
+                Access worship and music ministry resources.
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                📢
+            </div>
+
+            <h3>
+                Announcements
+            </h3>
+
+            <p>
+                Stay updated with MJMMGLOBAL news.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="account-box">
+
+        <h2>
+            Account Information
+        </h2>
+
+        <p>
+            <strong>Email:</strong>
+            <span id="userEmail"></span>
+        </p>
+
+    </div>
+
+</main>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script src="auth.js"></script>
+
+<script>
+    protectDashboard();
+</script>
+
+</body>
+
+</html>
