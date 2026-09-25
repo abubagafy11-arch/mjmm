@@ -1,9 +1,15 @@
+// ============================================
+// MJMMGLOBAL - SUPABASE AUTHENTICATION
+// ============================================
+
 const SUPABASE_URL =
     "https://lkhzhobvppofowxipwiz.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "PASTE_YOUR_CURRENT_PUBLISHABLE_KEY_HERE";
+    "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
 
+
+// Create Supabase client
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -11,7 +17,9 @@ const supabaseClient =
     );
 
 
+// ============================================
 // REGISTER
+// ============================================
 
 async function registerUser(event) {
 
@@ -36,10 +44,19 @@ async function registerUser(event) {
         document.getElementById("registerButton");
 
 
-    if (password !== confirmPassword) {
+    if (name === "") {
 
         message.textContent =
-            "Passwords do not match.";
+            "Please enter your full name.";
+
+        return;
+    }
+
+
+    if (email === "") {
+
+        message.textContent =
+            "Please enter your email.";
 
         return;
     }
@@ -54,77 +71,118 @@ async function registerUser(event) {
     }
 
 
+    if (password !== confirmPassword) {
+
+        message.textContent =
+            "Passwords do not match.";
+
+        return;
+    }
+
+
     button.disabled = true;
 
     button.textContent =
         "CREATING ACCOUNT...";
 
 
-    const { data, error } =
-        await supabaseClient.auth.signUp({
+    message.textContent =
+        "Please wait...";
 
-            email: email,
 
-            password: password,
+    try {
 
-            options: {
+        const result =
+            await supabaseClient.auth.signUp({
 
-                data: {
+                email: email,
 
-                    full_name: name
+                password: password,
+
+                options: {
+
+                    data: {
+
+                        full_name: name
+
+                    }
 
                 }
 
-            }
-
-        });
+            });
 
 
-    if (error) {
+        const data = result.data;
+
+        const error = result.error;
+
+
+        if (error) {
+
+            console.error(
+                "SUPABASE ERROR:",
+                error
+            );
+
+            message.textContent =
+                error.message;
+
+            button.disabled = false;
+
+            button.textContent =
+                "CREATE ACCOUNT";
+
+            return;
+        }
+
+
+        if (data.user && !data.session) {
+
+            message.textContent =
+                "Account created successfully. Please check your email and confirm your account.";
+
+            button.disabled = false;
+
+            button.textContent =
+                "ACCOUNT CREATED";
+
+            return;
+        }
+
+
+        if (data.session) {
+
+            window.location.href =
+                "dashboard.html";
+
+            return;
+        }
+
+
+    } catch (error) {
 
         console.error(error);
 
         message.textContent =
-            error.message;
+            "Unable to connect to Supabase.";
 
         button.disabled = false;
 
         button.textContent =
             "CREATE ACCOUNT";
-
-        return;
-    }
-
-
-    if (data.user && !data.session) {
-
-        message.textContent =
-            "Account created! Check your email to confirm your account.";
-
-        button.disabled = false;
-
-        button.textContent =
-            "ACCOUNT CREATED";
-
-        return;
-    }
-
-
-    if (data.session) {
-
-        window.location.href =
-            "dashboard.html";
-
     }
 
 }
 
 
+// ============================================
 // LOGIN
+// ============================================
 
 async function loginUser(event) {
 
     event.preventDefault();
+
 
     const email =
         document.getElementById("email").value.trim();
@@ -139,115 +197,208 @@ async function loginUser(event) {
         document.getElementById("loginButton");
 
 
+    if (email === "") {
+
+        message.textContent =
+            "Please enter your email.";
+
+        return;
+    }
+
+
+    if (password === "") {
+
+        message.textContent =
+            "Please enter your password.";
+
+        return;
+    }
+
+
     button.disabled = true;
 
     button.textContent =
         "LOGGING IN...";
 
 
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
+    try {
 
-            email: email,
+        const result =
+            await supabaseClient.auth.signInWithPassword({
 
-            password: password
+                email: email,
 
-        });
+                password: password
+
+            });
 
 
-    if (error) {
+        const data = result.data;
+
+        const error = result.error;
+
+
+        if (error) {
+
+            console.error(
+                "SUPABASE LOGIN ERROR:",
+                error
+            );
+
+            message.textContent =
+                error.message;
+
+            button.disabled = false;
+
+            button.textContent =
+                "LOGIN";
+
+            return;
+        }
+
+
+        if (data.user) {
+
+            window.location.href =
+                "dashboard.html";
+
+            return;
+        }
+
+
+    } catch (error) {
 
         console.error(error);
 
         message.textContent =
-            error.message;
+            "Unable to connect to Supabase.";
 
         button.disabled = false;
 
         button.textContent =
             "LOGIN";
-
-        return;
-    }
-
-
-    if (data.user) {
-
-        window.location.href =
-            "dashboard.html";
-
     }
 
 }
 
 
+// ============================================
 // LOGOUT
+// ============================================
 
 async function logoutUser() {
 
-    await supabaseClient.auth.signOut();
+    try {
 
-    window.location.href =
-        "login.html";
-
-}
+        const { error } =
+            await supabaseClient.auth.signOut();
 
 
-// PROTECT DASHBOARD
+        if (error) {
 
-async function protectDashboard() {
+            alert(error.message);
 
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth.getUser();
+            return;
+        }
 
-
-    if (!user) {
 
         window.location.href =
             "login.html";
 
-        return;
-    }
 
+    } catch (error) {
 
-    const name =
-        user.user_metadata?.full_name ||
-        "Member";
+        console.error(error);
 
-
-    const nameElement =
-        document.getElementById("userName");
-
-    const emailElement =
-        document.getElementById("userEmail");
-
-
-    if (nameElement) {
-
-        nameElement.textContent =
-            name;
-    }
-
-
-    if (emailElement) {
-
-        emailElement.textContent =
-            user.email;
+        alert(
+            "Unable to logout."
+        );
     }
 
 }
 
 
+// ============================================
+// PROTECT DASHBOARD
+// ============================================
+
+async function protectDashboard() {
+
+    try {
+
+        const {
+            data: {
+                user
+            },
+            error
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (error || !user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        const name =
+            user.user_metadata?.full_name ||
+            "Member";
+
+
+        const userName =
+            document.getElementById(
+                "userName"
+            );
+
+        const userEmail =
+            document.getElementById(
+                "userEmail"
+            );
+
+
+        if (userName) {
+
+            userName.textContent =
+                name;
+        }
+
+
+        if (userEmail) {
+
+            userEmail.textContent =
+                user.email;
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        window.location.href =
+            "login.html";
+    }
+
+}
+
+
+// ============================================
 // CONNECT FORMS
+// ============================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+
         const registerForm =
-            document.getElementById("registerForm");
+            document.getElementById(
+                "registerForm"
+            );
+
 
         if (registerForm) {
 
@@ -260,7 +411,10 @@ document.addEventListener(
 
 
         const loginForm =
-            document.getElementById("loginForm");
+            document.getElementById(
+                "loginForm"
+            );
+
 
         if (loginForm) {
 
