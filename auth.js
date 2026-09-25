@@ -3,9 +3,8 @@
 // =========================================
 
 // SUPABASE CONFIGURATION
-
 const SUPABASE_URL =
-    "sb_publishable__tzRHUb52ovPESNHLDubJQ_r01W9ZJu";
+    "https://lkhzhobvppofowxipwiz.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "YOUR_PUBLISHABLE_KEY";
