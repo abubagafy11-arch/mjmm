@@ -12,81 +12,110 @@
 
     <title>Login | MJMMGLOBAL</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
+
 <body class="auth-page">
 
-    <div class="auth-container">
 
-        <a href="index.html" class="auth-logo">
-            MJMM<span>GLOBAL</span>
+<div class="auth-container">
+
+
+    <a
+        href="index.html"
+        class="auth-logo"
+    >
+        MJMM<span>GLOBAL</span>
+    </a>
+
+
+    <p class="auth-label">
+        MEMBER LOGIN
+    </p>
+
+
+    <h1>
+        Welcome Back
+    </h1>
+
+
+    <p class="auth-description">
+        Login to your MJMMGLOBAL account.
+    </p>
+
+
+    <form id="loginForm">
+
+
+        <label for="email">
+            Email Address
+        </label>
+
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email address"
+            required
+        >
+
+
+        <label for="password">
+            Password
+        </label>
+
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+        >
+
+
+        <button
+            type="submit"
+            id="loginButton"
+        >
+            LOGIN
+        </button>
+
+
+    </form>
+
+
+    <p
+        id="message"
+        class="auth-message"
+    ></p>
+
+
+    <p class="auth-footer">
+
+        Don't have an account?
+
+        <a href="register.html">
+            Create Account
         </a>
 
-        <p class="auth-label">
-            MEMBER LOGIN
-        </p>
+    </p>
 
-        <h1>
-            Welcome Back
-        </h1>
 
-        <p class="auth-description">
-            Login to your MJMMGLOBAL account.
-        </p>
+</div>
 
-        <form id="loginForm">
 
-            <label for="email">
-                Email Address
-            </label>
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email address"
-                autocomplete="email"
-                required
-            >
 
-            <label for="password">
-                Password
-            </label>
+<script src="auth.js"></script>
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-            >
-
-            <button type="submit" id="loginButton">
-                LOGIN
-            </button>
-
-        </form>
-
-        <p id="message" class="auth-message"></p>
-
-        <p class="auth-footer">
-
-            Don't have an account?
-
-            <a href="register.html">
-                Create Account
-            </a>
-
-        </p>
-
-    </div>
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
-
-    <script src="auth.js"></script>
 
 </body>
 
