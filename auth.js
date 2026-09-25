@@ -1,14 +1,8 @@
-// =========================================
-// MJMMGLOBAL AUTHENTICATION SYSTEM
-// =========================================
-
-// SUPABASE CONFIGURATION
 const SUPABASE_URL =
     "https://lkhzhobvppofowxipwiz.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "YOUR_PUBLISHABLE_KEY";
-
 
 const supabaseClient =
     window.supabase.createClient(
