@@ -1,5 +1,10 @@
 // =========================================
-// MJMMGLOBAL SUPABASE CONFIGURATION
+// MJMMGLOBAL AUTHENTICATION SYSTEM
+// =========================================
+
+
+// =========================================
+// SUPABASE CONFIGURATION
 // =========================================
 
 const SUPABASE_URL =
@@ -9,6 +14,8 @@ const SUPABASE_PUBLISHABLE_KEY =
     "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
 
+// Create Supabase client
+
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -17,12 +24,13 @@ const supabaseClient =
 
 
 // =========================================
-// REGISTER
+// REGISTER USER
 // =========================================
 
 async function registerUser(event) {
 
     event.preventDefault();
+
 
     const name =
         document.getElementById("name").value.trim();
@@ -43,14 +51,45 @@ async function registerUser(event) {
         document.getElementById("registerButton");
 
 
-    if (!name || !email || !password || !confirmPassword) {
+    // Clear previous message
+
+    message.textContent = "";
+
+
+    // Check name
+
+    if (!name) {
 
         message.textContent =
-            "Please fill in all fields.";
+            "Please enter your full name.";
 
         return;
     }
 
+
+    // Check email
+
+    if (!email) {
+
+        message.textContent =
+            "Please enter your email address.";
+
+        return;
+    }
+
+
+    // Check password
+
+    if (!password) {
+
+        message.textContent =
+            "Please create a password.";
+
+        return;
+    }
+
+
+    // Minimum password length
 
     if (password.length < 6) {
 
@@ -61,6 +100,19 @@ async function registerUser(event) {
     }
 
 
+    // Confirm password
+
+    if (!confirmPassword) {
+
+        message.textContent =
+            "Please confirm your password.";
+
+        return;
+    }
+
+
+    // Compare passwords
+
     if (password !== confirmPassword) {
 
         message.textContent =
@@ -70,16 +122,22 @@ async function registerUser(event) {
     }
 
 
+    // Disable button
+
     button.disabled = true;
 
     button.textContent =
         "CREATING ACCOUNT...";
 
+
     message.textContent =
-        "Creating your account...";
+        "Creating your MJMMGLOBAL account...";
 
 
     try {
+
+
+        // Create Supabase account
 
         const { data, error } =
             await supabaseClient.auth.signUp({
@@ -101,7 +159,14 @@ async function registerUser(event) {
             });
 
 
+        // Check for error
+
         if (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
 
             message.textContent =
                 error.message;
@@ -115,10 +180,14 @@ async function registerUser(event) {
         }
 
 
+        // Email confirmation required
+
         if (data.user && !data.session) {
 
             message.textContent =
-                "Account created successfully! Please check your email and confirm your account.";
+                "Account created successfully! Please check your email and confirm your account before logging in.";
+
+            button.disabled = false;
 
             button.textContent =
                 "ACCOUNT CREATED";
@@ -126,6 +195,8 @@ async function registerUser(event) {
             return;
         }
 
+
+        // User is automatically logged in
 
         if (data.session) {
 
@@ -138,7 +209,10 @@ async function registerUser(event) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Unexpected registration error:",
+            error
+        );
 
         message.textContent =
             "Something went wrong. Please try again.";
@@ -148,11 +222,12 @@ async function registerUser(event) {
         button.textContent =
             "CREATE ACCOUNT";
     }
+
 }
 
 
 // =========================================
-// LOGIN
+// LOGIN USER
 // =========================================
 
 async function loginUser(event) {
@@ -173,8 +248,30 @@ async function loginUser(event) {
         document.getElementById("loginButton");
 
 
-    message.textContent =
-        "Signing you in...";
+    message.textContent = "";
+
+
+    // Check email
+
+    if (!email) {
+
+        message.textContent =
+            "Please enter your email address.";
+
+        return;
+    }
+
+
+    // Check password
+
+    if (!password) {
+
+        message.textContent =
+            "Please enter your password.";
+
+        return;
+    }
+
 
     button.disabled = true;
 
@@ -182,7 +279,14 @@ async function loginUser(event) {
         "LOGGING IN...";
 
 
+    message.textContent =
+        "Signing you in...";
+
+
     try {
+
+
+        // Login with Supabase
 
         const { data, error } =
             await supabaseClient.auth.signInWithPassword({
@@ -194,7 +298,14 @@ async function loginUser(event) {
             });
 
 
+        // Login error
+
         if (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
 
             message.textContent =
                 error.message;
@@ -208,16 +319,23 @@ async function loginUser(event) {
         }
 
 
+        // Login successful
+
         if (data.user) {
 
             window.location.href =
                 "dashboard.html";
+
+            return;
         }
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Unexpected login error:",
+            error
+        );
 
         message.textContent =
             "Something went wrong. Please try again.";
@@ -227,29 +345,52 @@ async function loginUser(event) {
         button.textContent =
             "LOGIN";
     }
+
 }
 
 
 // =========================================
-// LOGOUT
+// LOGOUT USER
 // =========================================
 
 async function logoutUser() {
 
-    const { error } =
-        await supabaseClient.auth.signOut();
+    try {
 
 
-    if (error) {
+        const { error } =
+            await supabaseClient.auth.signOut();
 
-        alert(error.message);
 
-        return;
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(error.message);
+
+            return;
+        }
+
+
+        window.location.href =
+            "login.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected logout error:",
+            error
+        );
+
+        alert(
+            "Unable to logout. Please try again."
+        );
     }
 
-
-    window.location.href =
-        "login.html";
 }
 
 
@@ -261,12 +402,17 @@ async function protectDashboard() {
 
     try {
 
+
         const {
-            data: { user },
+            data: {
+                user
+            },
             error
         } =
             await supabaseClient.auth.getUser();
 
+
+        // User is not logged in
 
         if (error || !user) {
 
@@ -277,17 +423,27 @@ async function protectDashboard() {
         }
 
 
+        // Get user's name
+
         const name =
             user.user_metadata?.full_name ||
             "Member";
 
 
+        // Find dashboard elements
+
         const nameElement =
-            document.getElementById("userName");
+            document.getElementById(
+                "userName"
+            );
 
         const emailElement =
-            document.getElementById("userEmail");
+            document.getElementById(
+                "userEmail"
+            );
 
+
+        // Display name
 
         if (nameElement) {
 
@@ -295,6 +451,8 @@ async function protectDashboard() {
                 name;
         }
 
+
+        // Display email
 
         if (emailElement) {
 
@@ -305,24 +463,78 @@ async function protectDashboard() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Dashboard protection error:",
+            error
+        );
 
         window.location.href =
             "login.html";
     }
+
 }
 
 
 // =========================================
-// FORM DETECTION
+// CHECK CURRENT USER
+// =========================================
+
+async function getCurrentUser() {
+
+    try {
+
+
+        const {
+            data: {
+                user
+            },
+            error
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (error) {
+
+            console.error(
+                "User check error:",
+                error
+            );
+
+            return null;
+        }
+
+
+        return user;
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected user check error:",
+            error
+        );
+
+        return null;
+    }
+
+}
+
+
+// =========================================
+// AUTOMATIC FORM CONNECTION
 // =========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+
+        // Registration form
+
         const registerForm =
-            document.getElementById("registerForm");
+            document.getElementById(
+                "registerForm"
+            );
 
 
         if (registerForm) {
@@ -335,8 +547,12 @@ document.addEventListener(
         }
 
 
+        // Login form
+
         const loginForm =
-            document.getElementById("loginForm");
+            document.getElementById(
+                "loginForm"
+            );
 
 
         if (loginForm) {
