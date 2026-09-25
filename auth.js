@@ -5,7 +5,7 @@
 // SUPABASE CONFIGURATION
 
 const SUPABASE_URL =
-    "https://lkhzhobvppofowxipwiz.supabase.co";
+    "sb_publishable__tzRHUb52ovPESNHLDubJQ_r01W9ZJu";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "YOUR_PUBLISHABLE_KEY";
