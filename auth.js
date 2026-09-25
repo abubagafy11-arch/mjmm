@@ -43,32 +43,14 @@ async function registerUser(event) {
         document.getElementById("registerButton");
 
 
-    message.textContent = "";
-
-
-    // Check name
-
-    if (!name) {
+    if (!name || !email || !password || !confirmPassword) {
 
         message.textContent =
-            "Please enter your full name.";
+            "Please fill in all fields.";
 
         return;
     }
 
-
-    // Check email
-
-    if (!email) {
-
-        message.textContent =
-            "Please enter your email address.";
-
-        return;
-    }
-
-
-    // Check password
 
     if (password.length < 6) {
 
@@ -78,8 +60,6 @@ async function registerUser(event) {
         return;
     }
 
-
-    // Check matching passwords
 
     if (password !== confirmPassword) {
 
@@ -95,9 +75,8 @@ async function registerUser(event) {
     button.textContent =
         "CREATING ACCOUNT...";
 
-
     message.textContent =
-        "Creating your MJMMGLOBAL account...";
+        "Creating your account...";
 
 
     try {
@@ -136,14 +115,10 @@ async function registerUser(event) {
         }
 
 
-        // Email confirmation required
-
         if (data.user && !data.session) {
 
             message.textContent =
-                "Account created successfully! Please check your email and confirm your account before logging in.";
-
-            button.disabled = false;
+                "Account created successfully! Please check your email and confirm your account.";
 
             button.textContent =
                 "ACCOUNT CREATED";
@@ -151,8 +126,6 @@ async function registerUser(event) {
             return;
         }
 
-
-        // Account created and logged in
 
         if (data.session) {
 
@@ -239,7 +212,6 @@ async function loginUser(event) {
 
             window.location.href =
                 "dashboard.html";
-
         }
 
 
@@ -342,13 +314,12 @@ async function protectDashboard() {
 
 
 // =========================================
-// AUTOMATIC FORM DETECTION
+// FORM DETECTION
 // =========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-
 
         const registerForm =
             document.getElementById("registerForm");
