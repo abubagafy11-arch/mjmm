@@ -12,108 +12,139 @@
 
     <title>Create Account | MJMMGLOBAL</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
+
 <body class="auth-page">
 
-    <div class="auth-container">
 
-        <a href="index.html" class="auth-logo">
-            MJMM<span>GLOBAL</span>
+<div class="auth-container">
+
+
+    <a
+        href="index.html"
+        class="auth-logo"
+    >
+        MJMM<span>GLOBAL</span>
+    </a>
+
+
+    <p class="auth-label">
+        CREATE YOUR ACCOUNT
+    </p>
+
+
+    <h1>
+        Join MJMMGLOBAL
+    </h1>
+
+
+    <p class="auth-description">
+        Create your account and become part
+        of the MJMMGLOBAL community.
+    </p>
+
+
+    <form id="registerForm">
+
+
+        <label for="name">
+            Full Name
+        </label>
+
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <label for="email">
+            Email Address
+        </label>
+
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email address"
+            required
+        >
+
+
+        <label for="password">
+            Password
+        </label>
+
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+        >
+
+
+        <label for="confirmPassword">
+            Confirm Password
+        </label>
+
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm your password"
+            minlength="6"
+            required
+        >
+
+
+        <button
+            type="submit"
+            id="registerButton"
+        >
+            CREATE ACCOUNT
+        </button>
+
+
+    </form>
+
+
+    <p
+        id="message"
+        class="auth-message"
+    ></p>
+
+
+    <p class="auth-footer">
+
+        Already have an account?
+
+        <a href="login.html">
+            Login
         </a>
 
-        <p class="auth-label">
-            CREATE YOUR ACCOUNT
-        </p>
+    </p>
 
-        <h1>
-            Join MJMMGLOBAL
-        </h1>
 
-        <p class="auth-description">
-            Create your account and become part of the
-            MJMMGLOBAL community.
-        </p>
+</div>
 
-        <form id="registerForm">
 
-            <label for="name">
-                Full Name
-            </label>
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
-            <input
-                type="text"
-                id="name"
-                placeholder="Enter your full name"
-                autocomplete="name"
-                required
-            >
 
-            <label for="email">
-                Email Address
-            </label>
+<script src="auth.js"></script>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email address"
-                autocomplete="email"
-                required
-            >
-
-            <label for="password">
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Create a password"
-                minlength="6"
-                autocomplete="new-password"
-                required
-            >
-
-            <label for="confirmPassword">
-                Confirm Password
-            </label>
-
-            <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                minlength="6"
-                autocomplete="new-password"
-                required
-            >
-
-            <button type="submit" id="registerButton">
-                CREATE ACCOUNT
-            </button>
-
-        </form>
-
-        <p id="message" class="auth-message"></p>
-
-        <p class="auth-footer">
-
-            Already have an account?
-
-            <a href="login.html">
-                Login
-            </a>
-
-        </p>
-
-    </div>
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
-
-    <script src="auth.js"></script>
 
 </body>
 
